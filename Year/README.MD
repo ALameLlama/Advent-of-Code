@@ -15,3 +15,6 @@
     Text Explaing Day 2
     ```
     </details>
+
+## Solutions
+- [Lang](Lang) - x/25

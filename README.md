@@ -20,4 +20,6 @@ You can try it yourself over at https://adventofcode.com/
 
 ```
 
-# Progress
+# Solutions
+- [2015](2015)
+  - [Rust](2015/Rust) - 1/25

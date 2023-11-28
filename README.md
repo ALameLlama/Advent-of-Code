@@ -22,4 +22,4 @@ You can try it yourself over at https://adventofcode.com/
 
 # Solutions
 - [2015](2015)
-  - [Rust](2015/Rust) - 1/25
+  - [Rust](2015/Rust) - 2/25

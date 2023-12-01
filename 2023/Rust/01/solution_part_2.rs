@@ -3,7 +3,6 @@ use regex::Regex;
 fn main() {
     let input = include_str!("./input2.txt");
 
-
     let dig = Regex::new(r"(?<num>\d|one|two|three|four|five|six|seven|eight|nine)").expect("Failed to compile regex");
     let dig_rev = Regex::new(r"(?<num>\d|eno|owt|eerht|ruof|evif|xis|neves|thgie|enin)").expect("Failed to compile reverse regex");
 

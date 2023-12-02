@@ -5,7 +5,7 @@ fn main() {
 
     let dig = Regex::new(r"(?P<num>\d)").expect("Failed to compile regex");
 
-    let output: i32 = input
+    let output: u32 = input
         .lines()
         .map(|line| aoc_process(line, &dig).unwrap_or_default())
         .sum();
@@ -13,21 +13,19 @@ fn main() {
     println!("{output}");
 }
 
-fn aoc_process(input: &str, dig: &Regex) -> Result<i32, &'static str> {
-    if input.is_empty() {
-        return Ok(0);
-    }
-
+fn aoc_process(input: &str, dig: &Regex) -> Result<u32, &'static str> {
     let caps_first = dig.captures(input).ok_or("Failed to match first capture")?;
-    
-    let binding = input.chars().rev().collect::<String>();
-    let caps_last = dig.captures(binding.as_str()).ok_or("Failed to match last capture")?;
 
-    let count: i32 = [caps_first["num"].to_string(), caps_last["num"].to_string()]
+    let binding = input.chars().rev().collect::<String>();
+    let caps_last = dig
+        .captures(binding.as_str())
+        .ok_or("Failed to match last capture")?;
+
+    let count: u32 = [caps_first["num"].to_string(), caps_last["num"].to_string()]
         .concat()
-        .parse::<i32>()
-        .map_err(|_| "Failed to parse into i32")?;
-        
+        .parse::<u32>()
+        .map_err(|_| "Failed to parse into u32")?;
+
     println!("{}", count);
     return Ok(count);
 }
@@ -46,7 +44,7 @@ treb7uchet
 
         let dig = Regex::new(r"(?P<num>\d)").expect("Failed to compile regex");
 
-        let output: i32 = input
+        let output: u32 = input
             .lines()
             .map(|line| aoc_process(line, &dig).unwrap_or_default())
             .sum();

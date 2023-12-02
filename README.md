@@ -25,4 +25,4 @@ You can try it yourself over at https://adventofcode.com/
   - [Rust](2015/Rust) - 2/25
 
 - [2023](2023)
-  - [Rust](2023/Rust) - 1/25
+  - [Rust](2023/Rust) - 2/25

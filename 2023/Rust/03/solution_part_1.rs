@@ -5,7 +5,7 @@ fn main() {
 
     let schematic = input.lines().collect::<Vec<_>>();
 
-    let output = aoc_process(schematic).unwrap_or_default(); // println!("{output}");
+    let output = aoc_process(schematic).unwrap_or_default();
 
     println!("{output}");
 }

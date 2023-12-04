@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     let input = include_str!("./input2.txt").lines().collect();
 
@@ -7,31 +9,43 @@ fn main() {
 }
 
 fn aoc_process(input: Vec<&str>) -> Result<u32, &'static str> {
-    let mut unscratched_cards: Vec<String> = Vec::new();
+    let mut processed_cards: HashMap<u32, usize> = HashMap::new();
+    let mut unscratched_cards: Vec<&str> = Vec::new();
     let mut total_cards = 0;
 
     // Process original cards.
-    for (_i, card) in input.iter().enumerate() {
-        process_card(&input, card, &mut total_cards, &mut unscratched_cards);
+    for card in &input {
+        process_card(
+            &input,
+            card,
+            &mut total_cards,
+            &mut processed_cards,
+            &mut unscratched_cards,
+        );
     }
 
     // Process new cards.
-    while !unscratched_cards.is_empty() {
-        let next_card = unscratched_cards.pop().unwrap();
-        process_card(&input, &next_card, &mut total_cards, &mut unscratched_cards);
+    while let Some(next_card) = unscratched_cards.pop() {
+        process_card(
+            &input,
+            &next_card,
+            &mut total_cards,
+            &mut processed_cards,
+            &mut unscratched_cards,
+        );
     }
 
     return Ok(total_cards);
 }
 
-fn process_card(
-    all_cards: &[&str],
+fn process_card<'a>(
+    all_cards: &[&'a str],
     card: &str,
     total_cards: &mut u32,
-    unscratched_cards: &mut Vec<String>,
+    processed_cards: &mut HashMap<u32, usize>,
+    unscratched_cards: &mut Vec<&'a str>,
 ) {
     let card_parsed: Vec<&str> = card.split(": ").collect();
-    *total_cards += 1;
 
     let card_id: u32 = card_parsed[0]
         .split_whitespace()
@@ -41,29 +55,46 @@ fn process_card(
         .parse::<u32>()
         .unwrap_or_default();
 
-    let scores: Vec<&str> = card_parsed[1].split(" | ").collect();
-
-    let winning_nums: Vec<u32> = scores[0]
-        .split_whitespace()
-        .map(|num| num.parse::<u32>().unwrap_or_default())
-        .collect();
-
-    let scoring_nums: Vec<u32> = scores[1]
-        .split_whitespace()
-        .map(|num| num.parse::<u32>().unwrap_or_default())
-        .collect();
-
-    let hits = scoring_nums
-        .iter()
-        .filter(|&x| winning_nums.iter().any(|y| y == x))
-        .count();
-
-    for i in 0..hits {
-        let next_card_id: u32 = card_id + i as u32;
-        if let Some(next_card) = all_cards.get(next_card_id as usize) {
-            unscratched_cards.push(next_card.to_string());
+    // See if it's something we've already processed already.
+    match processed_cards.get(&card_id).cloned() {
+        Some(hits) => {
+            for i in 0..hits {
+                let next_card_id: u32 = card_id + i as u32;
+                if let Some(next_card) = all_cards.get(next_card_id as usize) {
+                    unscratched_cards.push(next_card);
+                }
+            }
         }
-    }
+        _ => {
+            let scores: Vec<&str> = card_parsed[1].split(" | ").collect();
+
+            let winning_nums: Vec<u32> = scores[0]
+                .split_whitespace()
+                .map(|num| num.parse::<u32>().unwrap_or_default())
+                .collect();
+
+            let scoring_nums: Vec<u32> = scores[1]
+                .split_whitespace()
+                .map(|num| num.parse::<u32>().unwrap_or_default())
+                .collect();
+
+            let hits = scoring_nums
+                .iter()
+                .filter(|&x| winning_nums.iter().any(|y| y == x))
+                .count();
+
+            for i in 0..hits {
+                let next_card_id: u32 = card_id + i as u32;
+                if let Some(next_card) = all_cards.get(next_card_id as usize) {
+                    unscratched_cards.push(next_card);
+                }
+            }
+
+            *processed_cards.entry(card_id).or_insert(0) = hits;
+        }
+    };
+
+    *total_cards += 1;
 }
 
 #[cfg(test)]

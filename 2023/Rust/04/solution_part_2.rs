@@ -9,7 +9,7 @@ fn main() {
 }
 
 fn aoc_process(input: Vec<&str>) -> Result<u32, &'static str> {
-    let mut processed_cards: HashMap<u32, usize> = HashMap::new();
+    let mut processed_cards: HashMap<usize, usize> = HashMap::new();
     let mut unscratched_cards: Vec<&str> = Vec::new();
     let mut total_cards = 0;
 
@@ -42,25 +42,24 @@ fn process_card<'a>(
     all_cards: &[&'a str],
     card: &str,
     total_cards: &mut u32,
-    processed_cards: &mut HashMap<u32, usize>,
+    processed_cards: &mut HashMap<usize, usize>,
     unscratched_cards: &mut Vec<&'a str>,
 ) {
     let card_parsed: Vec<&str> = card.split(": ").collect();
 
-    let card_id: u32 = card_parsed[0]
+    let card_id = card_parsed[0]
         .split_whitespace()
         .last()
-        .ok_or("Failed to get id")
-        .unwrap_or_default()
-        .parse::<u32>()
-        .unwrap_or_default();
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
 
     // See if it's something we've already processed already.
     match processed_cards.get(&card_id).cloned() {
         Some(hits) => {
             for i in 0..hits {
-                let next_card_id: u32 = card_id + i as u32;
-                if let Some(next_card) = all_cards.get(next_card_id as usize) {
+                let next_card_id = card_id + i;
+                if let Some(next_card) = all_cards.get(next_card_id) {
                     unscratched_cards.push(next_card);
                 }
             }
@@ -68,15 +67,8 @@ fn process_card<'a>(
         _ => {
             let scores: Vec<&str> = card_parsed[1].split(" | ").collect();
 
-            let winning_nums: Vec<u32> = scores[0]
-                .split_whitespace()
-                .map(|num| num.parse::<u32>().unwrap_or_default())
-                .collect();
-
-            let scoring_nums: Vec<u32> = scores[1]
-                .split_whitespace()
-                .map(|num| num.parse::<u32>().unwrap_or_default())
-                .collect();
+            let winning_nums: Vec<&str> = scores[0].split_whitespace().collect();
+            let scoring_nums: Vec<&str> = scores[1].split_whitespace().collect();
 
             let hits = scoring_nums
                 .iter()
@@ -84,8 +76,8 @@ fn process_card<'a>(
                 .count();
 
             for i in 0..hits {
-                let next_card_id: u32 = card_id + i as u32;
-                if let Some(next_card) = all_cards.get(next_card_id as usize) {
+                let next_card_id = card_id + i;
+                if let Some(next_card) = all_cards.get(next_card_id) {
                     unscratched_cards.push(next_card);
                 }
             }

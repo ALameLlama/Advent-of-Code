@@ -5,7 +5,7 @@ fn main() {
 
     let schematic = input.lines().collect::<Vec<_>>();
 
-    let output = aoc_process(schematic).unwrap_or_default(); // println!("{output}");
+    let output = aoc_process(schematic).unwrap_or_default();
 
     println!("{output}");
 }
@@ -34,7 +34,7 @@ fn aoc_process(input: Vec<&str>) -> Result<u32, &'static str> {
 
                 let mut total_ratio: Vec<u32> = Vec::new();
 
-                // TODO: Refactor the nested statmenst to use a function instead.
+                // TODO: Refactor the nested statement to use a function instead.
 
                 // Check the current line.
                 if let Some(_found) = regex.captures(&input[i][range_start..range_end]) {

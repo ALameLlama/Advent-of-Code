@@ -26,3 +26,7 @@ You can try it yourself over at https://adventofcode.com/
 
 - [2023](2023)
   - [Rust](2023/Rust) - 7/25
+
+- [2024](2024)
+  - [Rust](2024/Rust) - 5/25
+

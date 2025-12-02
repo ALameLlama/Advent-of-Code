@@ -71,6 +71,7 @@ local function part2()
 				end
 			end
 		end
+
 		-- print(dir, count, r.index)
 	end
 
